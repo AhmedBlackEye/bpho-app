@@ -12,17 +12,95 @@ pub fn simpsons_rule(a: f64, b: f64, n: usize) -> f64 {
 
     h / 3.0 * sum
 }
-#[cfg(test)]
-mod tests {
-    use super::*;
 
-    #[test]
-    fn test_simpsons_rule() {
-        let a = 0.0; // Lower bound of the interval
-        let b = std::f64::consts::PI; // Upper bound of the interval (pi)
-        let n = 100; // Number of subintervals
-    
-        let integral = simpsons_rule(a, b, n);
-        println!("Approximate integral: {}", integral);
-    }
-}
+// struct Planet {
+//     name: String,
+//     distance_au: f64,
+//     eccentricity: f64,
+//     inclination_deg: f64,
+// }
+// static PLANETS_DATA: Vec<Planet> = vec![
+//     Planet {
+//         name: String::from("Mercury"),
+//         distance_au: 0.387,
+//         eccentricity: 0.21,
+//         inclination_deg: 7.0,
+//     },
+//     Planet {
+//         name: String::from("Venus"),
+//         distance_au: 0.723,
+//         eccentricity: 0.01,
+//         inclination_deg: 3.39,
+//     },
+//     Planet {
+//         name: String::from("Earth"),
+//         distance_au: 1.0,
+//         eccentricity: 0.02,
+//         inclination_deg: 0.0,
+//     },
+//     Planet {
+//         name: String::from("Mars"),
+//         distance_au: 1.523,
+//         eccentricity: 0.09,
+//         inclination_deg: 1.85,
+//     },
+//     Planet {
+//         name: String::from("Jupiter"),
+//         distance_au: 5.2,
+//         eccentricity: 0.05,
+//         inclination_deg: 1.31,
+//     },
+//     Planet {
+//         name: String::from("Saturn"),
+//         distance_au: 9.58,
+//         eccentricity: 0.06,
+//         inclination_deg: 2.49,
+//     },
+//     Planet {
+//         name: String::from("Uranus"),
+//         distance_au: 19.29,
+//         eccentricity: 0.05,
+//         inclination_deg: 0.77,
+//     },
+//     Planet {
+//         name: String::from("Neptune"),
+//         distance_au: 30.25,
+//         eccentricity: 0.01,
+//         inclination_deg: 1.77,
+//     },
+//     Planet {
+//         name: String::from("Pluto"),
+//         distance_au: 39.51,
+//         eccentricity: 0.25,
+//         inclination_deg: 17.5,
+//     },
+// ];
+// const PLANET_NAMES: Vec<String> = PLANETS_DATA.iter().map(|name| String::from(*name)).collect()
+
+
+
+// #[wasm_bindgen]
+// pub struct SolarSystem3D {
+//     planets: Vec<Planet>
+// }
+
+// #[wasm_bindgen]
+// impl SolarSystem3D {
+//     #[wasm_bindgen(constructor)]
+//     pub fn new(planet_name: Vec<JsValue>) -> SolarSystem3D {
+        
+//         let filtered_planets: Vec<Planet> = PLANETS_DATA
+//             .into_iter()
+//             .filter(|planet| PLANET_NAMES.contains(&planet_name))
+//             .collect();
+//         SolarSystem3D { planets: filtered_planets }
+//     }
+
+//     pub fn get(&self) -> i32 {
+//         self.internal
+//     }
+
+//     pub fn set(&mut self, val: i32) {
+//         self.internal = val;
+//     }
+// }
