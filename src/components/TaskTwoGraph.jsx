@@ -5,7 +5,7 @@ import { PlanetsData } from "@/Data/planets";
 
 function TaskTwoGraph() {
   const eccentricity = PlanetsData.map((planet) => planet.Eccentricity);
-  const a = PlanetsData.map((planet) => planet["Distance/ AU"]);
+  const a = PlanetsData.map((planet) => planet[distance]);
 
   const theta = math.range(0, 2 * math.pi, 0.01);
   const data = a.map((aVal, i) => {
@@ -27,7 +27,7 @@ function TaskTwoGraph() {
       mode: "lines",
       x: x.toArray(), // Convert math.js array to JavaScript array
       y: y.toArray(), // Convert math.js array to JavaScript array
-      name: PlanetsData[i].Planet,
+      name: PlanetsData[i].name,
     };
   });
 

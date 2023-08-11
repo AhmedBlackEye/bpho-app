@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 //     (planet) => planet.Eccentricity
 //   );
 //   const distances = PlanetsData.slice(5).map(
-//     (planet) => planet["Distance/ AU"]
+//     (planet) => planet[distance]
 //   );
 
 //   const theta = math.range(0, 2 * math.pi, 0.1).toArray();
@@ -35,7 +35,7 @@ import { useState, useEffect } from "react";
 //       mode: "lines",
 //       x: x,
 //       y: y,
-//       name: PlanetsData[i + 5].Planet,
+//       name: PlanetsData[i + 5].name,
 //     };
 //   });
 
@@ -68,7 +68,7 @@ import { useState, useEffect } from "react";
 //         size: 10,
 //       },
 //       showlegend: false,
-//       name: PlanetsData[index + 5].Planet,
+//       name: PlanetsData[index + 5].name,
 //     };
 //   });
 
@@ -141,9 +141,9 @@ export default TaskThreeGraph;
 class SolarSystem2D {
   constructor() {
     this.planets = PlanetsData.slice(5).map((planet) => ({
-      name: planet.Planet,
+      name: planet.name,
       eccentricity: planet.Eccentricity,
-      distance: planet["Distance/ AU"],
+      distance: planet[distance],
     }));
     this.theta = math.range(0, 2 * math.pi, 0.01);
     this.thetaArr = this.theta._data;

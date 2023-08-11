@@ -3,8 +3,8 @@ import Plot from "react-plotly.js";
 import { PlanetsData } from "@/Data/planets";
 
 function TaskOneGraph() {
-  const x = PlanetsData.map((planet) => Math.pow(planet["Distance/ AU"], 1.5));
-  const y = PlanetsData.map((planet) => planet["Orbital period/ Years"]);
+  const x = PlanetsData.map((planet) => Math.pow(planet[distance], 1.5));
+  const y = PlanetsData.map((planet) => planet[orbitalPeriod]);
   return (
     <Plot
       data={[

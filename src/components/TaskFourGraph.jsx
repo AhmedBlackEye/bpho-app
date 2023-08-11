@@ -64,10 +64,10 @@ export default TaskFourGraph;
 class SolarSystem3D {
   constructor() {
     this.planets = PlanetsData.slice(0, 4).map((planet) => ({
-      name: planet.Planet,
+      name: planet.name,
       eccentricity: planet.Eccentricity,
-      distance: planet["Distance/ AU"],
-      inclination: planet["Inclination/ Degrees"],
+      distance: planet[distance],
+      inclination: planet[inclination],
     }));
     this.theta = math.range(0, 2 * math.pi, 0.01);
     this.thetaArr = this.theta._data;
