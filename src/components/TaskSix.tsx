@@ -1,7 +1,6 @@
 import { Planet, PlanetsData } from "@/Data/planets";
 import { ReactP5Wrapper, Sketch, SketchProps } from "@p5-wrapper/react";
 import { useState } from "react";
-import { Slider } from "./ui/slider";
 
 type MySketchProps = SketchProps & {
   planets: CustomPlanet[];
@@ -123,7 +122,7 @@ export default function TaskSix() {
 
   return (
     <div>
-      <button onClick={() => setIsPlaying(!isPlaying)}>
+      <button onClick={() => setIsPlaying(!isPlaying)} className="">
         {isPlaying ? "Pause" : "Play"}
       </button>
 
@@ -132,13 +131,6 @@ export default function TaskSix() {
         planets={PlanetPair}
         isPlaying={isPlaying}
         speed={speed}
-      />
-      <Slider
-        defaultValue={[1]}
-        max={2}
-        step={0.5}
-        className="w-60 mt-10"
-        onValueChange={(value) => setSpeed(value)}
       />
     </div>
   );
