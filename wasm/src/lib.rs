@@ -1,4 +1,9 @@
+
 use wasm_bindgen::prelude::*;
+
+pub mod planets;
+
+
 
 #[wasm_bindgen]
 pub fn simpsons_rule(a: f64, b: f64, n: usize) -> f64 {
@@ -75,32 +80,4 @@ pub fn simpsons_rule(a: f64, b: f64, n: usize) -> f64 {
 //         inclination_deg: 17.5,
 //     },
 // ];
-// const PLANET_NAMES: Vec<String> = PLANETS_DATA.iter().map(|name| String::from(*name)).collect()
-
-
-
-// #[wasm_bindgen]
-// pub struct SolarSystem3D {
-//     planets: Vec<Planet>
-// }
-
-// #[wasm_bindgen]
-// impl SolarSystem3D {
-//     #[wasm_bindgen(constructor)]
-//     pub fn new(planet_name: Vec<JsValue>) -> SolarSystem3D {
-        
-//         let filtered_planets: Vec<Planet> = PLANETS_DATA
-//             .into_iter()
-//             .filter(|planet| PLANET_NAMES.contains(&planet_name))
-//             .collect();
-//         SolarSystem3D { planets: filtered_planets }
-//     }
-
-//     pub fn get(&self) -> i32 {
-//         self.internal
-//     }
-
-//     pub fn set(&mut self, val: i32) {
-//         self.internal = val;
-//     }
-// }
+// const PLANET_NAMES: Vec<String> = PLANETS_DATA.iter().map(|name| String::from(*name)).collect();
