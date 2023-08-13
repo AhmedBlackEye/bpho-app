@@ -1,68 +1,102 @@
-import * as math from "mathjs";
 import { Data } from "plotly.js";
 
-import { Planet, PlanetNames, Planets } from "@/Data/planets";
+import wasmInit, { getPlanetsRadiusLookupTable } from "wasm";
+import { TPlanet, Planets } from "@/Data/planets";
+
+type TPlanetCustom = TPlanet & {
+  innerAngle: number;
+  frame: number;
+};
+
+type TRadiusLookupTable = {
+  [planet: string]: number[];
+};
 
 class SolarSystem {
-  protected planets: Planet[];
-  protected readonly theta: math.Matrix;
-  protected readonly thetaArr: math.MathArray;
+  protected planets: TPlanetCustom[];
+  protected readonly theta: number[];
+  protected radiusLookupTable: TRadiusLookupTable | null = null; // Initialize to null
   protected orbits: Data[];
 
-  constructor(PlanetsToInclude: string[] = PlanetNames) {
-    this.planets =
-      PlanetsToInclude == PlanetNames
+  public constructor(PlanetsToInclude: string[] | undefined) {
+    this.planets = (
+      !PlanetsToInclude
         ? Planets
-        : Planets.filter((planet) => PlanetsToInclude.includes(planet.name));
-    this.theta = math.range(0, 2 * math.pi, 0.01);
-    this.thetaArr = this.theta.toArray();
-    this.orbits = this.getOrbits();
-  }
-  protected getRadius() {
-    const PlanetsRadiusLookup: 
-  }
-  getOrbits() {
-    return this.planets.map((planet) => {
-      const r = math.multiply(
-        planet.distance,
-        math.dotDivide(
-          math.subtract(1, Math.pow(planet.Eccentricity, 2)),
-          math.subtract(
-            1,
-            math.dotMultiply(
-              planet.Eccentricity,
-              math.map(this.theta, math.cos)
-            )
-          )
-        )
-      );
+        : Planets.filter((planet) => PlanetsToInclude.includes(planet.name))
+    ).map((planet) => ({ ...planet, frame: 0, innerAngle: 0 }));
+    this.theta = Array.from(
+      { length: 1000 },
+      (_, i) => 0 + i * ((2 * Math.PI) / 1000)
+    );
 
-      const X = math.dotMultiply(r, math.map(this.theta, math.cos));
-      const Y = math.dotMultiply(r, math.map(this.theta, math.sin));
+    this.initializeRadiusLookupTable();
+  }
+
+  protected async initializeRadiusLookupTable(): Promise<void> {
+    try {
+      await wasmInit();
+      const lookupTable = await this.getRadiusLookupTable(
+        this.planets.map((planet) => planet.name)
+      );
+      this.radiusLookupTable = lookupTable;
+    } catch (error) {
+      console.error("Error initializing radius lookup table:", error);
+    }
+  }
+  protected async ensureRadiusLookupTable(): Promise<void> {
+    if (!this.radiusLookupTable) {
+      await this.initializeRadiusLookupTable();
+    }
+  }
+
+  protected async getRadiusLookupTable(
+    PlanetsToInclude: string[]
+  ): Promise<TRadiusLookupTable> {
+    return getPlanetsRadiusLookupTable(PlanetsToInclude);
+  }
+}
+
+export class SolarSystem2D extends SolarSystem {
+  public constructor(PlanetsToInclude?: string[]) {
+    super(PlanetsToInclude);
+  }
+
+  public async getOrbits(): Promise<Data[]> {
+    await this.ensureRadiusLookupTable();
+
+    return this.planets.map((planet) => {
+      const r = this.radiusLookupTable![planet.name]; // Use non-null assertion
+      const X = r.map((val, i) => val * Math.cos(this.theta[i]));
+      const Y = r.map((val, i) => val * Math.sin(this.theta[i]));
 
       return {
         mode: "lines",
-        x: X.toArray(),
-        y: Y.toArray(),
+        x: X,
+        y: Y,
         name: planet.name,
       };
     });
   }
-  getCurrentPlanetPos(animationFrame) {
+
+  public async getCurrentPlanetPos(): Promise<Data[]> {
+    await this.ensureRadiusLookupTable();
+
     return this.planets.map((planet) => {
-      const r =
-        planet.distance *
-        (1 -
-          Math.pow(planet.Eccentricity, 2) /
-            (1 -
-              planet.Eccentricity * math.cos(this.thetaArr[animationFrame])));
-      const X = r * math.cos(this.thetaArr[animationFrame]);
-      const Y = r * math.sin(this.thetaArr[animationFrame]);
+      const r = this.radiusLookupTable![planet.name];
+      const maxFrames = r.length;
+
+      planet.frame = (planet.frame + 1) % maxFrames;
+      const angleIncrement = (2 * Math.PI) / planet.orbitalPeriod / 100; // Adjust as needed
+
+      planet.angle += angleIncrement;
+      planet.angle %= 2 * Math.PI;
+
+      const X = r[planet.frame] * Math.cos(planet.angle);
+      const Y = r[planet.frame] * Math.sin(planet.angle);
 
       return {
         x: [X],
         y: [Y],
-        type: "scatter",
         mode: "markers",
         marker: {
           color: "red",
@@ -74,4 +108,115 @@ class SolarSystem {
   }
 }
 
-const x = new SolarSystem();
+export class SolarSystem3D extends SolarSystem {
+  public constructor(PlanetsToInclude?: string[]) {
+    super(PlanetsToInclude);
+  }
+
+  public async getOrbits(): Promise<Data[]> {
+    await this.ensureRadiusLookupTable();
+
+    return this.planets.map((planet) => {
+      const r = this.radiusLookupTable![planet.name]; // Use non-null assertion
+
+      const XTemp = r.map((val, i) => val * Math.cos(this.theta[i]));
+
+      const X = XTemp.map((val) => val * Math.cos(planet.inclination));
+      const Y = r.map((val, i) => val * Math.sin(this.theta[i]));
+      const Z = XTemp.map((val) => val * Math.sin(planet.inclination));
+
+      return {
+        type: "scatter3d",
+        mode: "lines",
+        x: X,
+        y: Y,
+        z: Z,
+        name: planet.name,
+      };
+    });
+  }
+
+  public async getCurrentPlanetPos(): Promise<Data[]> {
+    await this.ensureRadiusLookupTable();
+
+    return this.planets.map((planet) => {
+      const r = this.radiusLookupTable![planet.name];
+      const maxFrames = 1000;
+
+      planet.frame = (planet.frame + 1) % maxFrames;
+      const angleIncrement = (2 * Math.PI) / planet.orbitalPeriod / 100; // Adjust as needed
+      const XTemp = r[planet.frame] * Math.cos(planet.angle);
+
+      const X = XTemp * Math.cos(planet.inclination);
+      const Y = r[planet.frame] * Math.sin(planet.angle);
+      const Z = XTemp * Math.sin(planet.inclination);
+
+      planet.angle += angleIncrement;
+      planet.angle %= 2 * Math.PI;
+      return {
+        x: [X],
+        y: [Y],
+        z: [Z],
+        type: "scatter3d",
+        mode: "markers",
+        marker: {
+          color: "red",
+          size: 4,
+        },
+        showlegend: false,
+      };
+    });
+  }
+}
+
+export class SolarSystem4D extends SolarSystem {
+  public constructor(PlanetsToInclude?: string[]) {
+    super(PlanetsToInclude);
+  }
+
+  public async getOrbits(): Promise<Data[]> {
+    await this.ensureRadiusLookupTable();
+
+    return this.planets.map((planet) => {
+      const r = this.radiusLookupTable![planet.name]; // Use non-null assertion
+      const X = r.map((val, i) => val * Math.cos(this.theta[i]));
+      const Y = r.map((val, i) => val * Math.sin(this.theta[i]));
+
+      return {
+        mode: "lines",
+        x: X,
+        y: Y,
+        name: planet.name,
+      };
+    });
+  }
+
+  public async getCurrentPlanetPos(): Promise<Data[]> {
+    await this.ensureRadiusLookupTable();
+
+    return this.planets.map((planet) => {
+      const r = this.radiusLookupTable![planet.name];
+      const maxFrames = r.length;
+
+      planet.frame = (planet.frame + 1) % maxFrames;
+      const angleIncrement = (2 * Math.PI) / planet.orbitalPeriod / 100; // Adjust as needed
+
+      planet.angle += angleIncrement;
+      planet.angle %= 2 * Math.PI;
+
+      const X = r[planet.frame] * Math.cos(planet.angle);
+      const Y = r[planet.frame] * Math.sin(planet.angle);
+
+      return {
+        x: [X],
+        y: [Y],
+        mode: "markers",
+        marker: {
+          color: "red",
+          size: 8,
+        },
+        showlegend: false,
+      };
+    });
+  }
+}

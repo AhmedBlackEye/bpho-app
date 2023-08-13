@@ -1,4 +1,4 @@
-export type Planet = {
+export type TPlanetData = {
   name: string;
   mass: number;
   distance: number;
@@ -7,10 +7,20 @@ export type Planet = {
   orbitalPeriod: number;
   Eccentricity: number;
   inclination: number;
-  angle: number; // for animation
+};
+export type TPlanet = {
+  name: string;
+  mass: number;
+  distance: number;
+  radius: number;
+  rotationalPeriod: number;
+  orbitalPeriod: number;
+  Eccentricity: number;
+  inclination: number;
+  angle: number;
 };
 
-export const Planets: Planet[] = [
+const PlanetsData: TPlanetData[] = [
   {
     name: "Mercury",
     mass: 0.055,
@@ -20,7 +30,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 0.24,
     Eccentricity: 0.21,
     inclination: 7,
-    angle: 0,
   },
   {
     name: "Venus",
@@ -31,7 +40,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 0.62,
     Eccentricity: 0.01,
     inclination: 3.39,
-    angle: 0,
   },
   {
     name: "Earth",
@@ -42,7 +50,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 1,
     Eccentricity: 0.02,
     inclination: 0,
-    angle: 0,
   },
   {
     name: "Mars",
@@ -53,7 +60,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 1.88,
     Eccentricity: 0.09,
     inclination: 1.85,
-    angle: 0,
   },
 
   {
@@ -65,7 +71,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 11.86,
     Eccentricity: 0.05,
     inclination: 1.31,
-    angle: 0,
   },
   {
     name: "Saturn",
@@ -76,7 +81,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 29.43,
     Eccentricity: 0.06,
     inclination: 2.49,
-    angle: 0,
   },
   {
     name: "Uranus",
@@ -87,7 +91,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 84.75,
     Eccentricity: 0.05,
     inclination: 0.77,
-    angle: 0,
   },
   {
     name: "Neptune",
@@ -98,7 +101,6 @@ export const Planets: Planet[] = [
     orbitalPeriod: 166.34,
     Eccentricity: 0.01,
     inclination: 1.77,
-    angle: 0,
   },
   {
     name: "Pluto",
@@ -109,12 +111,16 @@ export const Planets: Planet[] = [
     orbitalPeriod: 248.35,
     Eccentricity: 0.25,
     inclination: 17.5,
-    angle: 0,
   },
 ];
 
-export const PlanetNames: string[] = Planets.map((planet) => planet.name);
-export const PlanetLookup: Record<string, Planet> = Planets.reduce(
+export const Planets: TPlanet[] = PlanetsData.map((planet) => ({
+  ...planet,
+  angle: 0,
+}));
+
+export const PlanetNames: string[] = PlanetsData.map((planet) => planet.name);
+export const PlanetLookup: Record<string, TPlanet> = Planets.reduce(
   (lookup, planet) => {
     lookup[planet.name] = planet;
     return lookup;
@@ -123,6 +129,6 @@ export const PlanetLookup: Record<string, Planet> = Planets.reduce(
 );
 
 // Function to get planet by name from the lookup object
-export function getPlanetByName(name: string): Planet | undefined {
+export function getPlanetByName(name: string): TPlanet | undefined {
   return PlanetLookup[name];
 }

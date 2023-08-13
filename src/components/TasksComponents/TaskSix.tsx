@@ -1,11 +1,11 @@
-import { Planet, PlanetNames, getPlanetByName } from "@/Data/planets";
+import { TPlanet, PlanetNames, getPlanetByName } from "@/Data/planets";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 import { useState } from "react";
 import { Button, Select } from "@chakra-ui/react";
 import SpeedSlider from "../UI/SpeedSlider";
 import SpirographSketch from "../TasksComponentHelper/SpirographSketch";
 
-export type CustomPlanet = Planet & {
+export type CustomPlanet = TPlanet & {
   XPos: number;
   YPos: number;
   path: { x: number; y: number }[];
