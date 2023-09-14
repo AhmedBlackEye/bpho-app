@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Plot from "react-plotly.js";
-import { SolarSystem2D } from "../TasksComponentHelper/SolarSystem";
+import { SolarSystem } from "../TasksComponentHelper/SolarSystem";
 import { Data } from "plotly.js";
 
 const layout = {
   width: 640,
   height: 480,
   title: "Solar System 2D Animation",
-  xaxis: { title: "x/AU", range: [-2, 2] },
-  yaxis: { title: "y/AU", range: [-2, 2] },
+  xaxis: { title: "x/AU" },
+  yaxis: { title: "y/AU" },
   frame: {
     duration: 0,
     redraw: false,
   },
 };
 
-function TaskThree() {
+function TaskThree({ planetNames }: { planetNames: string[] }) {
   const [orbitsData, setOrbitsData] = useState<Data[]>([]);
   const [planetsPos, setPlanetsPos] = useState<Data[]>([]);
-  const solarSystem = new SolarSystem2D(["Mercury", "Venus", "Earth", "Mars"]);
-
+  const solarSystem = new SolarSystem(planetNames);
   const animatePlanets = () => {
-    const animationId = requestAnimationFrame(async function animate() {
-      const newData = await solarSystem.getCurrentPlanetPos();
+    const animationId = requestAnimationFrame(function animate() {
+      const newData = solarSystem.getCurrentPlanetsPos();
       setPlanetsPos(newData);
       requestAnimationFrame(animate);
     });
@@ -31,12 +30,9 @@ function TaskThree() {
   };
 
   useEffect(() => {
-    async function fetchData() {
-      const orbitsData = await solarSystem.getOrbits();
-      setOrbitsData(orbitsData);
-    }
+    const orbitsData = solarSystem.getOrbits();
+    setOrbitsData(orbitsData);
 
-    fetchData();
     const cancelAnimation = animatePlanets();
 
     return () => {
@@ -46,7 +42,6 @@ function TaskThree() {
 
   return (
     <div>
-      <h1>Solar System 2D Animation</h1>
       <Plot data={[...orbitsData, ...planetsPos]} layout={layout} />
     </div>
   );

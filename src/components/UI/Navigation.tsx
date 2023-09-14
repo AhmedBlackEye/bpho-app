@@ -1,5 +1,4 @@
 import { Image } from "@chakra-ui/react";
-import React from "react";
 
 function Navigation() {
   return (
@@ -11,7 +10,7 @@ function Navigation() {
         alt="Dan Abramov"
       />
       <nav>
-        <a href="#sdfg" className="text-lg font-semibold cursor-pointer">
+        <a href="#" className="text-lg font-semibold cursor-pointer">
           Source Code
         </a>
       </nav>

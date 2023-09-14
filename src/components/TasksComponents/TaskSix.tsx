@@ -42,7 +42,7 @@ export default function TaskSix() {
     ]);
   }
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 rounded-lg max-w-fit ">
+    <div className="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 rounded-lg flex-1 fle ">
       <div className="rounded-lg overflow-hidden">
         <ReactP5Wrapper
           sketch={SpirographSketch}
@@ -51,7 +51,7 @@ export default function TaskSix() {
           isPlaying={isPlaying}
         />
       </div>
-      <div className="flex flex-col gap-4 justify-center p-4">
+      <div className="flex flex-col gap-4 justify-center p-4 flex-grow">
         <div className="flex gap-2">
           {[0, 1].map((i) => (
             <Select
@@ -71,7 +71,7 @@ export default function TaskSix() {
             </Select>
           ))}
         </div>
-        <div className="max-w-lg my-4">
+        <div className="max-w-lg my-4 w-[800px] mx-auto">
           <SpeedSlider
             onValueChangeEnd={(value) => {
               setSpeed(value);

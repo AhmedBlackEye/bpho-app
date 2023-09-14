@@ -9,19 +9,20 @@ pub struct Planet {
     name: &'static str,
     distance: f64,
     eccentricity: f64,
+    orbital_period: f64,
 }
 
 pub fn get_planets_data() -> [(&'static str, Planet); 9] {
     [
-        ("Mercury", Planet { name: "Mercury", distance: 0.387, eccentricity: 0.21 }),
-        ("Venus", Planet { name: "Venus", distance: 0.723, eccentricity: 0.01 }),
-        ("Earth", Planet { name: "Earth", distance: 1.0, eccentricity: 0.02 }),
-        ("Mars", Planet { name: "Mars", distance: 1.523, eccentricity: 0.09 }),
-        ("Jupiter", Planet { name: "Jupiter", distance: 5.2, eccentricity: 0.05 }),
-        ("Saturn", Planet { name: "Saturn", distance: 9.58, eccentricity: 0.06 }),
-        ("Uranus", Planet { name: "Uranus", distance: 19.29, eccentricity: 0.05 }),
-        ("Neptune", Planet { name: "Neptune", distance: 30.25, eccentricity: 0.01 }),
-        ("Pluto", Planet { name: "Pluto", distance: 39.51, eccentricity: 0.25 }),
+        ("Mercury", Planet { name: "Mercury", distance: 0.387, eccentricity: 0.21, orbital_period:0.24}),
+        ("Venus", Planet { name: "Venus", distance: 0.723, eccentricity: 0.01, orbital_period: 0.62}),
+        ("Earth", Planet { name: "Earth", distance: 1.0, eccentricity: 0.02, orbital_period: 1.0}),
+        ("Mars", Planet { name: "Mars", distance: 1.523, eccentricity: 0.09 , orbital_period:1.88}),
+        ("Jupiter", Planet { name: "Jupiter", distance: 5.2, eccentricity: 0.05 , orbital_period:11.86}),
+        ("Saturn", Planet { name: "Saturn", distance: 9.58, eccentricity: 0.06 , orbital_period:29.43}),
+        ("Uranus", Planet { name: "Uranus", distance: 19.29, eccentricity: 0.05 , orbital_period:84.75}),
+        ("Neptune", Planet { name: "Neptune", distance: 30.25, eccentricity: 0.01, orbital_period: 166.34}),
+        ("Pluto", Planet { name: "Pluto", distance: 39.51, eccentricity: 0.25 , orbital_period: 248.35}),
     ]
 }
 

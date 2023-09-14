@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
 import Plot from "react-plotly.js";
-import { SolarSystem2D } from "../TasksComponentHelper/SolarSystem";
-import { Data } from "plotly.js";
+import { SolarSystem } from "../TasksComponentHelper/SolarSystem";
 
 const layout = {
   width: 640,
@@ -11,24 +9,12 @@ const layout = {
   yaxis: { title: "y/AU" },
 };
 
-function TaskTwo() {
-  const [data, setData] = useState<Data[]>([]);
-  useEffect(() => {
-    async function fetchData() {
-      const solarSystem = new SolarSystem2D();
-      const orbitsData = await solarSystem.getOrbits();
-      setData(orbitsData);
-    }
+function TaskTwo({ planetNames }: { planetNames: string[] }) {
+  const solarSystem = new SolarSystem(planetNames);
 
-    fetchData();
-  }, []);
+  const data = solarSystem.getOrbits();
 
-  return (
-    <div>
-      <h1>Solar System 2D Animation</h1>
-      <Plot data={data} layout={layout} />
-    </div>
-  );
+  return <Plot data={data} layout={layout} />;
 }
 
 export default TaskTwo;

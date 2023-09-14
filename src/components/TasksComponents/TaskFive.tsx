@@ -48,7 +48,7 @@ function TaskFive() {
     },
   ];
   return (
-    <div className="flex flex-col md:flex-row p-4 bg-blue-50 max-w-fit rounded-lg gap-4">
+    <div className="flex flex-col md:flex-row p-4 bg-blue-50 rounded-lg gap-4 w-full">
       <div>
         <Plot
           data={Data}
@@ -56,8 +56,8 @@ function TaskFive() {
           className="rounded-md overflow-hidden"
         />
       </div>
-      <div className="flex items-center justify-center gap-2 flex-row">
-        <span>Planet:</span>
+      <div className="flex items-center justify-center gap-2 flex-row mx-auto">
+        <span>Choose Planet:</span>
         <Select
           placeholder={choosenPlanet}
           onChange={(e) => setChoosenPlanet(e.target.value)}
