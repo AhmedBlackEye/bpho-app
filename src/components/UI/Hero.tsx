@@ -30,14 +30,12 @@ function Hero() {
           </div>
         </div>
       </div>
-      {/* <div> */}
       <Image
         boxSize="500px"
         objectFit="cover"
         src="./Hero_Earth.webp"
         alt="Dan Abramov"
       />
-      {/* </div> */}
     </div>
   );
 }
